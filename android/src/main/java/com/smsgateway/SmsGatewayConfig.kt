@@ -4,10 +4,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import org.json.JSONArray
 import org.json.JSONObject
-import com.smsgateway.Constants.ConfName
 
-class ConfigProvider(context: Context) {
-    private val prefs: SharedPreferences = context.getSharedPreferences(ConfName, Context.MODE_PRIVATE)
+class SmsGatewayConfig(context: Context) {
+    private val prefs: SharedPreferences = context.getSharedPreferences(SmsGatewayConstants.ConfigName, Context.MODE_PRIVATE)
 
     val isEnabled: Boolean
         get() = prefs.getBoolean("sms_listener_enabled", false)

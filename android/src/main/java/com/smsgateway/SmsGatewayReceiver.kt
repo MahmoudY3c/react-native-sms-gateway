@@ -21,11 +21,11 @@ import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.ReactContext
 import com.facebook.react.modules.core.DeviceEventManagerModule
 
-class SmsReceiver : BroadcastReceiver() {
+class SmsGatewayReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action != Telephony.Sms.Intents.SMS_RECEIVED_ACTION) return
 
-        val config = ConfigProvider(context)
+        val config = SmsGatewayConfig(context)
         if (!config.isEnabled) return
 
         val smsMessages: Array<SmsMessage> =  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -48,20 +48,24 @@ class SmsReceiver : BroadcastReceiver() {
         val senderWhitelist = config.sendersFilterList
         val msgKeywordsWhiteList = config.msgKeywordsFilterList
 
-        val isSenderMatchFilter = FiltersHelper.matchesWhitelist(sender, senderWhitelist)
-        val isMsgMatchKeywords = FiltersHelper.matchesWhitelist(messageBody, msgKeywordsWhiteList)
+        val isSenderMatchFilter = SmsGatewayFiltersHelper.matchesWhitelist(sender, senderWhitelist)
+        val isMsgMatchKeywords = SmsGatewayFiltersHelper.matchesWhitelist(messageBody, msgKeywordsWhiteList)
 
         
         // Only send if either matches
         if (!isSenderMatchFilter && !isMsgMatchKeywords) {
-            Log.i(Constants.TAG, "Sender and message not match any whitelist items. Ignoring.")
+            Log.i(SmsGatewayConstants.TAG, "Sender and message do not match any whitelist items. Ignoring.")
             return
         }
+
+        // val intentExtras = intent.extras
+        // // ✅ Get SIM slot from intent extras (may vary by OEM)
+        // val simSlot = intentExtras.getInt("slot", -1) // Some devices use "simSlot", "simId", or "subscription"
 
         val subscriptionId = intent.getIntExtra("subscription", -1)
         val simSlot = getSimSlotFromSubscriptionId(context, subscriptionId)
 
-        Log.d(Constants.TAG, "SMS from: $sender\nMessage: $messageBody\nSlot: $simSlot\nPhoneNumber: $phoneNumber")
+        Log.d(SmsGatewayConstants.TAG, "SMS from: $sender\nMessage: $messageBody\nSlot: $simSlot\nPhoneNumber: $phoneNumber")
         
 
         Toast.makeText(context, "SMS received from $sender", Toast.LENGTH_LONG).show()
@@ -82,14 +86,14 @@ class SmsReceiver : BroadcastReceiver() {
 
         // ✅ Dispatch based on deliveryType
         when (config.deliveryType.lowercase()) {
-            "http" -> HttpHelper.send(config.httpConfigs, payload)
-            "telegram" -> TelegramHelper.send(config, payload)
+            "http" -> SmsGatewayHttpHelper.send(config.httpConfigs, payload)
+            "telegram" -> SmsGatewayTelegramHelper.send(config, payload)
             "all" -> {
                 // Send to both by default if deliveryType is unknown
-                HttpHelper.send(config.httpConfigs, payload)
-                TelegramHelper.send(config, payload)
+                SmsGatewayHttpHelper.send(config.httpConfigs, payload)
+                SmsGatewayTelegramHelper.send(config, payload)
             }
-            else -> Log.e(Constants.TAG, "Unknown deliveryType `${config.deliveryType}`")
+            else -> Log.e(SmsGatewayConstants.TAG, "Unknown deliveryType `${config.deliveryType}`")
         }
     }
 
@@ -100,7 +104,7 @@ class SmsReceiver : BroadcastReceiver() {
             val infoList = subscriptionManager.activeSubscriptionInfoList
             infoList?.firstOrNull { it.subscriptionId == subId }?.simSlotIndex ?: -1
         } catch (e: Exception) {
-            Log.e(Constants.TAG, "Error getting simSlot: ${e.message}")
+            Log.e(SmsGatewayConstants.TAG, "Error getting simSlot: ${e.message}")
             -1
         }
     }
@@ -122,7 +126,7 @@ class SmsReceiver : BroadcastReceiver() {
             }
             it
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                .emit(Constants.SmsEvent, params)
+                .emit(SmsGatewayConstants.SmsEvent, params)
         }
     }
 }

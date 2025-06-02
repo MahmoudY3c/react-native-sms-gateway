@@ -7,16 +7,16 @@ import java.net.URLEncoder
 import org.json.JSONArray
 import org.json.JSONObject
 import android.content.Context
-import com.smsgateway.ConfigProvider
+import com.smsgateway.SmsGatewayConfig
 import android.util.Log
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.nio.charset.StandardCharsets
-import com.smsgateway.Constants.TAG
+import com.smsgateway.SmsGatewayConstants.TAG
 
-object TelegramHelper {
-    fun send(config: ConfigProvider, payload: JSONObject) {
+object SmsGatewayTelegramHelper {
+    fun send(config: SmsGatewayConfig, payload: JSONObject) {
         val chatIds: JSONArray = config.telegramChatIds
         val token: String = config.telegramToken ?: ""
         val parseMode: String = config.telegramParseMode
@@ -43,6 +43,11 @@ object TelegramHelper {
                             continue // skip empty chat Ids
                         }
 
+                        // val url = "https://api.telegram.org/bot${token}/sendMessage" +
+                        //           "?chat_id=$chatId&text=$message&parse_mode=$parseMode"
+
+                        // val request = okhttp3.Request.Builder().url(url).get().build()
+                        // val response = client.newCall(request).execute()
                         val url = "https://api.telegram.org/bot${token}/sendMessage"
                         val jsonBody = JSONObject()
                         jsonBody.put("chat_id", chatId)
@@ -70,12 +75,41 @@ object TelegramHelper {
         }
     }
 
+    private fun escapeMarkdownV2(text: String): String {
+        val regex = Regex("""([_*\[\]()~`>#+\-=|{}.!])""")
+        return text.replace(regex) { "\\${it.value}" }
+    }
+
     private fun escapeHtml(text: String): String {
         return text
             .replace("&", "&amp;")
             .replace("<", "&lt;")
             .replace(">", "&gt;")
             .replace("\"", "&quot;")
+    }
+    
+    fun encodeURIComponent(input: String): String {
+        val result = StringBuilder()
+        for (c in input) {
+            if (isSafeChar(c)) {
+                result.append(c)
+            } else {
+                val bytes = c.toString().toByteArray(StandardCharsets.UTF_8)
+                for (b in bytes) {
+                    result.append('%')
+                    result.append(String.format("%02X", b.toInt() and 0xFF))
+                }
+            }
+        }
+        return result.toString()
+    }
+
+    private fun isSafeChar(c: Char): Boolean {
+        return when (c) {
+            in 'a'..'z', in 'A'..'Z', in '0'..'9' -> true
+            '-', '_', '.', '!', '~', '*', '\'', '(', ')' -> true
+            else -> false
+        }
     }
     
     private fun createMsgTemplate(msgBody: String, sender: String, phoneNumber: String, timestamp: String): String {

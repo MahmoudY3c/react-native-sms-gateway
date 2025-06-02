@@ -1,8 +1,8 @@
-// Constants.kt
 package com.smsgateway
 
-object Constants {
+object SmsGatewayConstants {
     const val TAG = "SmsGateway"
     const val SmsEvent = "com.smsgateway.SmsGatewayModule"
-    const val ConfName = "SmsGatewayConfig"
+    const val NAME = "SmsGateway"
+    const val ConfigName = "SmsGatewayConfig"
 }

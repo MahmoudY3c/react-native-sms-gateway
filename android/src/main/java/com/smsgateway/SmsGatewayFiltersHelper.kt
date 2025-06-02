@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 import org.json.JSONArray
 import org.json.JSONObject
 
-object FiltersHelper {
+object SmsGatewayFiltersHelper {
     fun matchesWhitelist(value: String?, whitelist: List<String>): Boolean {
         if (whitelist.isEmpty()) return true // If no filter, allow everything
         val input = value?.lowercase() ?: return false

@@ -10,13 +10,6 @@
 
   <application>
 
-    <activity
-      android:name=".MainActivity"
-      android:launchMode="singleTask"
-      android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-      android:windowSoftInputMode="adjustResize"
-      android:exported="true">
-
       <receiver android:enabled="true" android:exported="true"
         android:name=".SmsReceiver"
         android:permission="android.permission.BROADCAST_SMS">
@@ -32,6 +25,5 @@
         </intent-filter>
       </receiver>
 
-    </activity>
   </application>
 </manifest>

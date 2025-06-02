@@ -9,9 +9,9 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONArray
 import org.json.JSONObject
-import com.smsgateway.Constants.TAG
+import com.smsgateway.SmsGatewayConstants.TAG
 
-object HttpHelper {
+object SmsGatewayHttpHelper {
     fun send(configs: JSONArray, payload: JSONObject) {
         CoroutineScope(Dispatchers.IO).launch {
             val client = OkHttpClient()
