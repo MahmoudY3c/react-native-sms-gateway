@@ -88,8 +88,10 @@ You must manually add the following permissions and receivers to your app's `And
  <application ....>
     ......
     <!-- SMS Receiver: required for receiving SMS in background -->
-    <receiver android:enabled="true" android:exported="true"
-      android:name=".SmsReceiver"
+    <receiver 
+      android:name="com.smsgateway.SmsGatewayReceiver"
+      android:enabled="true" 
+      android:exported="true"
       android:permission="android.permission.BROADCAST_SMS">
       <intent-filter android:priority="999">
         <action android:name="android.provider.Telephony.SMS_RECEIVED" />
@@ -97,7 +99,10 @@ You must manually add the following permissions and receivers to your app's `And
     </receiver>
 
     <!-- Boot Receiver: required for listening after device reboot -->
-    <receiver android:name=".BootReceiver" android:exported="false">
+    <receiver 
+      android:name="com.smsgateway.SmsGatewayBootReceiver" 
+      android:enabled="true"
+      android:exported="false">
       <intent-filter>
         <action android:name="android.intent.action.BOOT_COMPLETED" />
       </intent-filter>
