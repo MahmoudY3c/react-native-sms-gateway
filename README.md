@@ -2,11 +2,16 @@
 
 Need to listen/forward incoming SMS to your server or even a Telegram chat, even if your app is completely closed or the phone is restarted? This package is designed to do just that. It can send SMS to a local or external service/third-party API or to a Telegram chat via bot token. It covers most SMS use cases, such as receiving urgent messages (like OTPs) when you are not home, or forwarding SMS to external tools.
 
+
+> **⚠️ CAUTION:**
+> This package **only works on Android**. There is **no public SMS API for iOS**, so iOS is **not supported** due to platform restrictions (Apple does not provide public APIs for SMS access) and cannot receive or forward SMS using this library.
+
+
 ---
 
 ## Features
 
-- **Background SMS Listener:** Receives SMS even when the app is closed or after device reboot.
+- **Background SMS Listener:** Receives SMS even when the app is closed or after device reboot (Android only).
 - **Forward SMS to HTTP Server:** Forwards SMS to one or more HTTP endpoints with optional custom headers.
 - **Forward SMS to Telegram:** Forwards SMS to Telegram chats, groups, or channels using a bot.
 - **Flexible Filtering:** Filter SMS by sender or message keywords (case-insensitive, partial match).
@@ -19,10 +24,12 @@ Need to listen/forward incoming SMS to your server or even a Telegram chat, even
 ---
 
 ## Table of Contents
-
+- [Features](#features)
 - [Installation](#installation)
+- [Platform Support](#platform-support)
 - [Android Setup](#android-setup)
 - [How it works](#how-it-works)
+- [Usage](#usage)
 - [API Reference](#api-reference)
   - [enableSmsListener](#enablesmslistenerenabled)
   - [setHttpConfigs](#sethttpconfigsdata)
@@ -63,6 +70,15 @@ npm install react-native-sms-gateway
 # or
 yarn add react-native-sms-gateway
 ```
+
+---
+
+## Platform Support
+
+- **Android:** Fully supported.
+- **iOS:** Not supported (Apple does not provide public APIs for SMS access).
+
+---
 
 ## Android Setup
 
@@ -131,6 +147,61 @@ You must manually add the following permissions and receivers to your app's `And
   - All settings are persisted natively and survive app restarts.
 
 ---
+
+---
+
+## Usage
+
+### Basic Setup
+
+```ts
+import { SmsGateway } from "react-native-sms-gateway";
+
+// Enable SMS listener (required)
+SmsGateway.enableSmsListener(true);
+
+// Set HTTP endpoints (optional)
+SmsGateway.setHttpConfigs([
+  { url: "https://your-server.com/sms", headers: { Authorization: "Bearer TOKEN" } }
+]);
+
+// Set Telegram config (optional)
+SmsGateway.setTelegramConfig(
+  "YOUR_TELEGRAM_BOT_TOKEN",
+  ["123456789", "-100987654321"] // chat IDs (user, group, or channel)
+);
+
+// Set delivery type: "http", "telegram", or "all"
+SmsGateway.setDeliveryType("all");
+
+// Set sender filter (optional)
+SmsGateway.setSendersFilterList(["Vodafone", "010"]);
+
+// Set message keyword filter (optional)
+SmsGateway.setMsgKeywordsFilterList(["OTP", "gift"]);
+
+// Set user phone number (optional, for forwarding)
+SmsGateway.setUserPhoneNumber("+201234567890");
+```
+
+### Listen for SMS in JS
+
+```ts
+const subscription = SmsGateway.addEventListener((data) => {
+  // data: { msg, timestamp, phoneNumber, sender }
+  console.log("Received SMS:", data);
+});
+
+// Remove listener when done
+subscription.remove();
+```
+
+### Get All Settings
+
+```ts
+const settings = await SmsGateway.getAllSettings();
+console.log(settings);
+```
 
 ## API Reference
 
@@ -391,11 +462,11 @@ console.log(settings);
 
 ## Contributing
 
-Contributions are welcome! May I couldn't constantly update the pkg and add new features I'm always available for bugs / code review so please open issues or pull requests for bugs, features, or documentation improvements. Thanks for everyone 
+Contributions are welcome! Please open issues or pull requests for bugs, features, or documentation improvements.
 
 ---
 
 ## License
 
-> MIT
+MIT
 
