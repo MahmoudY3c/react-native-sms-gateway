@@ -1,0 +1,147 @@
+{
+  "name": "react-native-sms-gateway",
+  "version": "1.0.0",
+  "description": "listen for SMS and send it to server, telegram chat or listen for it into your app",
+  "main": "./lib/module/index.js",
+  "types": "./lib/typescript/src/index.d.ts",
+  "files": [
+    "src",
+    "lib",
+    "android",
+    "react-native.config.js",
+    "!android/build",
+    "!android/gradle",
+    "!android/gradlew",
+    "!android/gradlew.bat",
+    "!android/local.properties",
+    "!**/__tests__",
+    "!**/__fixtures__",
+    "!**/__mocks__",
+    "!**/.*"
+  ],
+  "exports": {
+    ".": {
+      "source": "./src/index.tsx",
+      "types": "./lib/typescript/src/index.d.ts",
+      "default": "./lib/module/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "typecheck": "tsc",
+    "lint": "eslint \"**/*.{js,ts,tsx}\"",
+    "prepare": "bob build",
+    "release": "release-it --only-version"
+  },
+  "keywords": [
+    "react-native",
+    "android",
+    "sms",
+    "sms-listener",
+    "sms-gateway",
+    "sms-sender"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MahmoudY3c/react-native-sms-gateway.git"
+  },
+  "author": "MahmoudY3c <wpsmahmoud25@gmail.com> (https://github.com/MahmoudY3c)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MahmoudY3c/react-native-sms-gateway/issues"
+  },
+  "homepage": "https://github.com/MahmoudY3c/react-native-sms-gateway#readme",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
+  },
+  "codegenConfig": {
+    "name": "SmsGatewaySpec",
+    "type": "modules",
+    "jsSrcsDir": "src",
+    "android": {
+      "javaPackageName": "com.smsgateway"
+    }
+  },
+  "prettier": {
+    "quoteProps": "consistent",
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "es5",
+    "useTabs": false
+  },
+  "release-it": {
+    "git": {
+      "commitMessage": "chore: release ${version}",
+      "tagName": "v${version}"
+    },
+    "npm": {
+      "publish": true
+    },
+    "github": {
+      "release": true
+    },
+    "plugins": {
+      "@release-it/conventional-changelog": {
+        "preset": {
+          "name": "angular"
+        }
+      }
+    }
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "packageManager": "yarn@3.6.1",
+  "create-react-native-library": {
+    "type": "legacy-module",
+    "languages": "kotlin-swift",
+    "version": "0.49.8"
+  },
+  "react-native-builder-bob": {
+    "source": "src",
+    "output": "lib",
+    "targets": [
+      [
+        "module",
+        {
+          "esm": true
+        }
+      ],
+      [
+        "typescript",
+        {
+          "project": "tsconfig.build.json"
+        }
+      ]
+    ]
+  },
+  "devDependencies": {
+    "@commitlint/config-conventional": "^19.8.1",
+    "@eslint/compat": "^1.2.9",
+    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/js": "^9.28.0",
+    "@evilmartians/lefthook": "^1.11.13",
+    "@react-native/eslint-config": "^0.79.2",
+    "@release-it/conventional-changelog": "^10.0.1",
+    "commitlint": "^19.8.1",
+    "del-cli": "^6.0.0",
+    "eslint": "^9.28.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.4.1",
+    "prettier": "^3.5.3",
+    "react-native": "0.72.0",
+    "react-native-builder-bob": "^0.40.11",
+    "release-it": "^19.0.3",
+    "typescript": "^5.8.3"
+  },
+  "engines": {
+    "node": ">=16",
+    "bun": ">=1.0.0"
+  }
+}
