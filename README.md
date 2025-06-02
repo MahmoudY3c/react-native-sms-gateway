@@ -24,42 +24,50 @@ Need to listen/forward incoming SMS to your server or even a Telegram chat, even
 ---
 
 ## Table of Contents
-- [Features](#features)
-- [Installation](#installation)
-- [Platform Support](#platform-support)
-- [Android Setup](#android-setup)
-- [How it works](#how-it-works)
-- [Usage](#usage)
-- [API Reference](#api-reference)
-  - [enableSmsListener](#enablesmslistenerenabled)
-  - [setHttpConfigs](#sethttpconfigsdata)
-  - [getHttpConfigs](#gethttpconfigs)
-  - [setTelegramConfig](#settelegramconfigbot_token-chat_ids)
-  - [setTelegramBotToken](#settelegrambottokenbot_token)
-  - [setTelegramChatIds](#settelegramchatidschat_ids)
-  - [getTelegramBotToken](#gettelegrambottoken)
-  - [getTelegramChatIds](#gettelegramchatids)
-  - [getTelegramParseMode](#gettelegramparsemode)
-  - [setDeliveryType](#setdeliverytypedelivery_type)
-  - [getDeliveryType](#getdeliverytype)
-  - [isSmsListenerEnabled](#issmslistenerenabled)
-  - [getUserPhoneNumber](#getuserphonenumber)
-  - [setUserPhoneNumber](#setuserphonenumberphonenumber)
-  - [getAllSettings](#getallsettings)
-  - [setSendersFilterList](#setsendersfilterlistlist)
-  - [getSendersFilterList](#getsendersfilterlist)
-  - [setMsgKeywordsFilterList](#setmsgkeywordsfilterlistlist)
-  - [getMsgKeywordsFilterList](#getmsgkeywordsfilterlist)
-  - [addEventListener](#addeventlistenereventhandler)
-  - [getEventListenersCount](#geteventlistenerscount)
-  - [removeAllSMSEventListeners](#removeallsmseventlisteners)
-- [Usage](#usage)
-- [Telegram Setup](#telegram-setup)
-- [Filtering](#filtering)
-- [Tips & Issues](#tips--issues)
-- [Future Features](#future-features)
-- [Contributing](#contributing)
-- [License](#license)
+- [react-native-sms-gateway](#react-native-sms-gateway)
+  - [Features](#features)
+  - [Table of Contents](#table-of-contents)
+  - [Installation](#installation)
+  - [Platform Support](#platform-support)
+  - [Android Setup](#android-setup)
+  - [How it works](#how-it-works)
+  - [Usage](#usage)
+    - [Basic Setup](#basic-setup)
+    - [Listen for SMS in JS](#listen-for-sms-in-js)
+    - [Get All Settings](#get-all-settings)
+  - [API Reference](#api-reference)
+    - [enableSmsListener(enabled)](#enablesmslistenerenabled)
+    - [setHttpConfigs(data)](#sethttpconfigsdata)
+    - [getHttpConfigs()](#gethttpconfigs)
+    - [setTelegramConfig(bot\_token, chat\_ids)](#settelegramconfigbot_token-chat_ids)
+    - [setTelegramBotToken(bot\_token)](#settelegrambottokenbot_token)
+    - [setTelegramChatIds(chat\_ids)](#settelegramchatidschat_ids)
+    - [getTelegramBotToken()](#gettelegrambottoken)
+    - [getTelegramChatIds()](#gettelegramchatids)
+    - [getTelegramParseMode()](#gettelegramparsemode)
+    - [setDeliveryType(delivery\_type)](#setdeliverytypedelivery_type)
+    - [getDeliveryType()](#getdeliverytype)
+    - [isSmsListenerEnabled()](#issmslistenerenabled)
+    - [getUserPhoneNumber()](#getuserphonenumber)
+    - [setUserPhoneNumber(phoneNumber)](#setuserphonenumberphonenumber)
+    - [getAllSettings()](#getallsettings)
+    - [setSendersFilterList(list)](#setsendersfilterlistlist)
+    - [getSendersFilterList()](#getsendersfilterlist)
+    - [setMsgKeywordsFilterList(list)](#setmsgkeywordsfilterlistlist)
+    - [getMsgKeywordsFilterList()](#getmsgkeywordsfilterlist)
+    - [addEventListener(eventHandler)](#addeventlistenereventhandler)
+    - [getEventListenersCount()](#geteventlistenerscount)
+    - [removeAllSMSEventListeners()](#removeallsmseventlisteners)
+  - [Usage](#usage-1)
+    - [Basic Setup](#basic-setup-1)
+    - [Listen for SMS in JS](#listen-for-sms-in-js-1)
+    - [Get All Settings](#get-all-settings-1)
+  - [Telegram Setup](#telegram-setup)
+  - [Filtering](#filtering)
+  - [Tips \& Issues](#tips--issues)
+  - [Future Features](#future-features)
+  - [Contributing](#contributing)
+  - [License](#license)
 
 ---
 
@@ -414,20 +422,19 @@ console.log(settings);
 2. **Handle Send Chat Id Via `get_chat_id` Command**
   - By default telegram provide 2 ways to but / receive message via `webhook` or `long pooling` if you plan to deploy you bot to free server like vercel you can use `webhook` check the docs to understand how to use it it's easy to do it then you can use the next examples to get started [check telegram docs for get updates](https://core.telegram.org/bots/api#getting-updates)
 
-  - Long pooling (recommended for test)
+  - Long pooling _(recommended for test)_
     - the easiest way to get chat id specially when you are testing the pkg is using long pooling the next example install `yarn add node-telegram-bot-api` then try next 
 
     - `index.js`
-    ``` js
+    ```js
     const TelegramBot = require('node-telegram-bot-api');
     const TOKEN = 'YOUR_BOT_TOKEN_HERE';
     const bot = new TelegramBot(TOKEN, { polling: true });  
-    
+
     bot.onText(/\/get_chat_id/, (msg) => {
       const user_id = msg.from.id;
       const sender_username = msg.from.username;
-      const chat_id = msg.chat.id;
-
+      const chat_id = msg.chat.id;  
       bot.sendMessage(
         chat_id,
         `Your id is: \`${user_id}\`\nUsername is: \`${sender_username}\`\nCurrent chat id is: \`${chat_id}\``,
@@ -436,13 +443,12 @@ console.log(settings);
         }
       );
     }); 
-    
-    console.log('waiting for "get_chat_id" command ...');
-   ```
 
-  - Nodejs (recommended for production) example to send chat id via webhook first install `yarn add node-telegram-bot-api` then try next code 
-  
-    - **Set webhook url** create any js file copy next code and update to add your bot token then run it by node 
+    console.log('waiting for "get_chat_id" command ...');
+    ```
+   
+  - Nodejs _(recommended for production)_
+    - **Set webhook url** create any js file copy next code and update to add bot token, webhook url then run it to set webhook url
     > **⚠️ CAUTION:** since you set webhook url you couldn't use long polling 
     ``` ts
     const BOT_TOKEN = '123456789:ABCDEF_your_bot_token_here';
@@ -461,7 +467,7 @@ console.log(settings);
     .catch(console.error)
     ```
 
-    - node app example
+    - node app example to send chat id via webhook first install `yarn add node-telegram-bot-api` then try next code 
     ``` ts
     import TelegramBot from 'node-telegram-bot-api';
     import cors from 'cors';
