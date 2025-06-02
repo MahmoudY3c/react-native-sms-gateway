@@ -1,6 +1,6 @@
 {
   "name": "react-native-sms-gateway",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "listen for SMS and send it to server, telegram chat or listen for it into your app",
   "main": "./lib/module/index.js",
   "types": "./lib/typescript/src/index.d.ts",
