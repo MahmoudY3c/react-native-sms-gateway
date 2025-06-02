@@ -9,10 +9,10 @@
   <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
   <application>
-    
+
     <!-- SMS Receiver: required for receiving SMS in background -->
     <receiver 
-      android:name="com.smsgateway.SmsGatewayReceiver"
+      android:name=".SmsGatewayReceiver"
       android:enabled="true" 
       android:exported="true"
       android:permission="android.permission.BROADCAST_SMS">
@@ -23,7 +23,7 @@
 
     <!-- Boot Receiver: required for listening after device reboot -->
     <receiver 
-      android:name="com.smsgateway.SmsGatewayBootReceiver" 
+      android:name=".SmsGatewayBootReceiver" 
       android:enabled="true"
       android:exported="false">
       <intent-filter>
