@@ -18,7 +18,6 @@ Need to listen/forward incoming SMS to your server or even a Telegram chat, even
 - **Configurable Delivery:** Choose to deliver via HTTP, Telegram, or both.
 - **React Native Event Emitter:** Optionally receive SMS events in your JS app for custom handling.
 - **Persistent Configuration:** All settings are stored in Android SharedPreferences.
-- **Dual SIM Support:** Attempts to detect SIM slot (where possible).
 - **Boot Persistence:** Listens after device reboot (requires permission).
 
 ---
@@ -58,6 +57,8 @@ Need to listen/forward incoming SMS to your server or even a Telegram chat, even
     - [addEventListener(eventHandler)](#addeventlistenereventhandler)
     - [getEventListenersCount()](#geteventlistenerscount)
     - [removeAllSMSEventListeners()](#removeallsmseventlisteners)
+  - [HTTP Forwarding Details](#http-forwarding-details)
+    - [Example: Node.js HTTP Receiver](#example-nodejs-http-receiver)
   - [Telegram Setup](#telegram-setup)
   - [Filtering](#filtering)
   - [Tips \& Issues](#tips--issues)
@@ -223,6 +224,7 @@ SmsGateway.setHttpConfigs([
   { url: "https://your-server.com/sms", headers: { Authorization: "Bearer TOKEN" } }
 ]);
 ```
+Each time an SMS is received, a POST request is sent to each configured URL with the SMS data as JSON.
 
 ### getHttpConfigs()
 Get the current HTTP configuration.
@@ -348,6 +350,51 @@ Remove all SMS event listeners.
 ```ts
 SmsGateway.removeAllSMSEventListeners();
 ```
+
+## HTTP Forwarding Details
+
+When an SMS is received and forwarded to your HTTP endpoint, the package sends a POST request with the following JSON body:
+
+```json
+{
+  "msg": "Message content",
+  "timestamp": 1717430000000,
+  "phoneNumber": "+201234567890",
+  "sender": "Vodafone"
+}
+```
+
+- **HTTP Method:** `POST`
+- **Content-Type:** `application/json`
+- **Headers:** Any custom headers you set via `setHttpConfigs`.
+
+### Example: Node.js HTTP Receiver
+
+Here’s a minimal Node.js server to receive and log incoming SMS webhooks:
+
+```js
+// example/http-receiver.js
+const express = require('express');
+const app = express();
+app.use(express.json());
+
+app.post('/sms', (req, res) => {
+  console.log('Received SMS:', req.body);
+  res.status(200).send('OK');
+});
+
+app.listen(3000, () => console.log('Listening on port 3000'));
+```
+
+- Start with: `node http-receiver.js`
+- Set your endpoint in the package config:
+  ```ts
+  SmsGateway.setHttpConfigs([
+    { url: "http://your-server-ip:3000/sms", headers: {} }
+  ]);
+  ```
+
+---
 
 ## Telegram Setup
 
