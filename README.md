@@ -264,13 +264,13 @@ app.listen(3000, () => console.log('Listening on port 3000'));
    - Next you will prompted to enter commands enter the following command `get_chat_id - display current chat id` so it will be used later to get chat it now you are ready
 
 2. **Handle Send Chat Id Via `get_chat_id` Command**
-  - By default telegram provide 2 ways to but / receive message via `webhook` or `long pooling` if you plan to deploy you bot to free server like vercel you can use `webhook` check the docs to understand how to use it it's easy to do it then you can use the next examples to get started [check telegram docs for get updates](https://core.telegram.org/bots/api#getting-updates)
+  - By default telegram provide 2 ways to receive message via `webhook` and `long pooling` if you plan to deploy you bot to free server like vercel you can use `webhook` check the docs to understand how to use it. It's easy to do it then you can use the next examples to get started [check telegram docs for get updates](https://core.telegram.org/bots/api#getting-updates)
 
   - Long pooling _(recommended for test)_
-    - the easiest way to get chat id specially when you are testing the pkg is using long pooling the next example install `yarn add node-telegram-bot-api` then try next 
+    - the easiest way to get chat id specially when you are testing the pkg is long pooling 
    - Start a chat with your bot (search for your bot username in Telegram and press "Start").
    - Send the command `/get_chat_id` to your bot.
-   - If you use a simple bot script (see below), it will reply with your chat ID.
+   - If you use a simple bot script (see below), it will reply with your chat ID. install `node-telegram-bot-api` then try next 
 
    **Sample Node.js Bot for Testing:**
    ```js
@@ -438,8 +438,8 @@ Below are all available methods, their parameters, and usage examples.
 ### enableSmsListener(enabled)
 Enable or disable the SMS listener (background service).
 
-| Parameter | Type    | Required | Description                |
-|-----------|---------|----------|----------------------------|
+| Parameter | Type    | Required | Description                                       |
+| --------- | ------- | -------- | ------------------------------------------------- |
 | enabled   | boolean | Yes      | Enable (true) or disable (false) the SMS listener |
 
 **Example:**
@@ -453,9 +453,9 @@ SmsGateway.enableSmsListener(false); // Disable
 ### setHttpConfigs(configs)
 Set HTTP endpoints and optional headers for forwarding SMS.
 
-| Parameter | Type     | Required | Description |
-|-----------|----------|----------|-------------|
-| configs   | Array<{ url: string, headers?: object }> | Yes | List of HTTP endpoints and optional headers |
+| Parameter | Type                                     | Required | Description                                 |
+| --------- | ---------------------------------------- | -------- | ------------------------------------------- |
+| configs   | Array<{ url: string, headers?: object }> | Yes      | List of HTTP endpoints and optional headers |
 
 **Example:**
 ```ts
@@ -469,9 +469,9 @@ SmsGateway.setHttpConfigs([
 ### setTelegramConfig(botToken, chatIds)
 Set Telegram bot token and chat IDs at once.
 
-| Parameter | Type     | Required | Description |
-|-----------|----------|----------|-------------|
-| botToken  | string   | Yes      | Telegram bot token |
+| Parameter | Type     | Required | Description                                 |
+| --------- | -------- | -------- | ------------------------------------------- |
+| botToken  | string   | Yes      | Telegram bot token                          |
 | chatIds   | string[] | Yes      | Array of chat IDs (user, group, or channel) |
 
 **Example:**
@@ -484,8 +484,8 @@ SmsGateway.setTelegramConfig("YOUR_BOT_TOKEN", ["YOUR_CHAT_ID"]);
 ### setSendersFilterList(list)
 Set sender filter list (array of strings).
 
-| Parameter | Type     | Required | Description |
-|-----------|----------|----------|-------------|
+| Parameter | Type     | Required | Description                            |
+| --------- | -------- | -------- | -------------------------------------- |
 | list      | string[] | Yes      | List of sender names/numbers to filter |
 
 **Example:**
@@ -498,8 +498,8 @@ SmsGateway.setSendersFilterList(["Vodafone", "010"]);
 ### setMsgKeywordsFilterList(list)
 Set message keywords filter list (array of strings).
 
-| Parameter | Type     | Required | Description |
-|-----------|----------|----------|-------------|
+| Parameter | Type     | Required | Description                         |
+| --------- | -------- | -------- | ----------------------------------- |
 | list      | string[] | Yes      | List of keywords to filter messages |
 
 **Example:**
@@ -512,8 +512,8 @@ SmsGateway.setMsgKeywordsFilterList(["OTP", "gift"]);
 ### setDeliveryType(type)
 Set delivery type: 'http', 'telegram', or 'all'.
 
-| Parameter | Type   | Required | Description |
-|-----------|--------|----------|-------------|
+| Parameter | Type   | Required | Description                  |
+| --------- | ------ | -------- | ---------------------------- |
 | type      | string | Yes      | 'http', 'telegram', or 'all' |
 
 **Example:**
@@ -526,9 +526,9 @@ SmsGateway.setDeliveryType("all");
 ### addEventListener(eventHandler)
 Add a JS event listener for incoming SMS (works only when app is running).
 
-| Parameter    | Type       | Required | Description |
-|--------------|------------|----------|-------------|
-| eventHandler | function   | Yes      | Callback function to handle SMS events |
+| Parameter    | Type     | Required | Description                            |
+| ------------ | -------- | -------- | -------------------------------------- |
+| eventHandler | function | Yes      | Callback function to handle SMS events |
 
 **Example:**
 ```ts
@@ -546,7 +546,7 @@ subscription.remove();
 Get all current settings as an object.
 
 | Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
+| --------- | ---- | -------- | ----------- |
 | (none)    |      |          |             |
 
 **Example:**
