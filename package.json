@@ -1,7 +1,7 @@
 {
   "name": "react-native-sms-gateway",
   "version": "1.0.15",
-  "description": "listen for SMS and send it to server, telegram chat or listen for it into your app",
+  "description": "React Native Android SMS gateway: listen, receive, forward, and send SMS to server, Telegram, or your app. Background SMS listener, HTTP/Telegram forwarding, SMS filter, event emitter, OTP, Android-only.",
   "main": "./lib/module/index.js",
   "types": "./lib/typescript/src/index.d.ts",
   "files": [
@@ -40,7 +40,26 @@
     "sms",
     "sms-listener",
     "sms-gateway",
-    "sms-sender"
+    "sms-sender",
+    "sms-receiver",
+    "sms-forwarder",
+    "sms-forwarding",
+    "sms-otp",
+    "sms-telegram",
+    "sms-http",
+    "background-sms",
+    "sms-broadcast",
+    "sms-event",
+    "sms-filter",
+    "sms-api",
+    "sms-service",
+    "sms-inbox",
+    "sms-react-native",
+    "react-native-sms",
+    "react-native-sms-gateway",
+    "react-native-sms-listener",
+    "react-native-sms-forwarder",
+    "react-native-android-sms"
   ],
   "repository": {
     "type": "git",
