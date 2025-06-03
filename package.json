@@ -1,6 +1,6 @@
 {
   "name": "react-native-sms-gateway",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "description": "React Native Android SMS gateway: listen, receive, forward, and send SMS to server, Telegram, or your app. Background SMS listener, HTTP/Telegram forwarding, SMS filter, event emitter, OTP, Android-only.",
   "main": "./lib/module/index.js",
   "types": "./lib/typescript/src/index.d.ts",
