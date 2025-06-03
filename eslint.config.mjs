@@ -28,14 +28,12 @@ export default defineConfig([
           tabWidth: 2,
           trailingComma: 'es5',
           useTabs: false,
+          endOfLine: 'auto',
         },
       ],
     },
   },
   {
-    ignores: [
-      'node_modules/',
-      'lib/'
-    ],
+    ignores: ['node_modules/', 'lib/'],
   },
 ]);
