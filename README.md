@@ -258,9 +258,16 @@ app.listen(3000, () => console.log('Listening on port 3000'));
 
 1. **Create a Telegram Bot:**
    - Open [@BotFather](https://t.me/BotFather) in Telegram.
-   - Send `/newbot` and follow the instructions to get your bot token.
+   - Send `/newbot` to create a bot and get the bot token. 
+   - Enter bot name like `your_bot` then you will get the bot token copy and save it we will use it later.
+   - Next stay at  [@BotFather](https://t.me/BotFather) and use `/setcommands` to set command to help get the chat id after enter `/setcommands` you will get message like `Choose a bot to change the list of commands.` so enter your bot name like in example above `@your_bot`.
+   - Next you will prompted to enter commands enter the following command `get_chat_id - display current chat id` so it will be used later to get chat it now you are ready
 
-2. **Get Your Chat ID:**
+2. **Handle Send Chat Id Via `get_chat_id` Command**
+  - By default telegram provide 2 ways to but / receive message via `webhook` or `long pooling` if you plan to deploy you bot to free server like vercel you can use `webhook` check the docs to understand how to use it it's easy to do it then you can use the next examples to get started [check telegram docs for get updates](https://core.telegram.org/bots/api#getting-updates)
+
+  - Long pooling _(recommended for test)_
+    - the easiest way to get chat id specially when you are testing the pkg is using long pooling the next example install `yarn add node-telegram-bot-api` then try next 
    - Start a chat with your bot (search for your bot username in Telegram and press "Start").
    - Send the command `/get_chat_id` to your bot.
    - If you use a simple bot script (see below), it will reply with your chat ID.
