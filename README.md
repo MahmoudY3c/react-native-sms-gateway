@@ -141,12 +141,12 @@ You must manually add the following permissions and receivers to your app's `And
 ## How it works
 
 - **Native Side (Android/Kotlin):**
-  - [`SmsReceiver`](android/src/main/java/com/smsgateway/SmsReceiver.kt) listens for incoming SMS and applies sender/message filters.
+  - [`SmsGatewayReceiver`](android/src/main/java/com/smsgateway/SmsGatewayReceiver.kt) listens for incoming SMS and applies sender/message filters.
   - If a match is found, it builds a payload and dispatches it to:
-    - HTTP endpoints via [`HttpHelper`](android/src/main/java/com/smsgateway/HttpHelper.kt)
-    - Telegram via [`TelegramHelper`](android/src/main/java/com/smsgateway/TelegramHelper.kt)
+    - HTTP endpoints via [`SmsGatewayHttpHelper`](android/src/main/java/com/smsgateway/SmsGatewayHttpHelper.kt)
+    - Telegram via [`SmsGatewayTelegramHelper`](android/src/main/java/com/smsgateway/SmsGatewayTelegramHelper.kt)
     - JS event emitter (if enabled)
-  - All configuration is managed via [`ConfigProvider`](android/src/main/java/com/smsgateway/ConfigProvider.kt) and [`SmsNativeModule`](android/src/main/java/com/smsgateway/SmsNativeModule.kt).
+  - All configuration is managed via [`SmsGatewayConfig`](android/src/main/java/com/smsgateway/SmsGatewayConfig.kt) and [`SmsGatewayModule`](android/src/main/java/com/smsgateway/SmsGatewayModule.kt).
 
 - **JS Side (React Native):**
   - Use the [`SmsGateway`](index.ts) class to configure, enable/disable, and listen for SMS events.
