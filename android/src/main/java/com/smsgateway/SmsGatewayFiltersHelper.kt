@@ -9,6 +9,6 @@ object SmsGatewayFiltersHelper {
     fun matchesWhitelist(value: String?, whitelist: List<String>): Boolean {
         if (whitelist.isEmpty()) return true // If no filter, allow everything
         val input = value?.lowercase() ?: return false
-        return whitelist.any { input.contains(it.lowercase()) }
+        return whitelist.any { input.contains(it.trim().lowercase()) }
     }
 }

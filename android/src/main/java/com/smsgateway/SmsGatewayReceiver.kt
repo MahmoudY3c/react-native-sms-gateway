@@ -53,7 +53,7 @@ class SmsGatewayReceiver : BroadcastReceiver() {
 
         
         // Only send if either matches
-        if (!isSenderMatchFilter && !isMsgMatchKeywords) {
+        if (!isSenderMatchFilter || !isMsgMatchKeywords) {
             Log.i(SmsGatewayConstants.TAG, "Sender and message do not match any whitelist items. Ignoring.")
             return
         }
