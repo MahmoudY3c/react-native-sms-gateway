@@ -34,37 +34,38 @@ Need to listen/forward incoming SMS to your server or even a Telegram chat, even
     - [Basic Setup](#basic-setup)
     - [Listen for SMS in JS](#listen-for-sms-in-js)
     - [Get All Settings](#get-all-settings)
-  - [API Reference](#api-reference)
-    - [enableSmsListener(enabled)](#enablesmslistenerenabled)
-    - [setHttpConfigs(data)](#sethttpconfigsdata)
-    - [getHttpConfigs()](#gethttpconfigs)
-    - [setTelegramConfig(bot\_token, chat\_ids)](#settelegramconfigbot_token-chat_ids)
-    - [setTelegramBotToken(bot\_token)](#settelegrambottokenbot_token)
-    - [setTelegramChatIds(chat\_ids)](#settelegramchatidschat_ids)
-    - [getTelegramBotToken()](#gettelegrambottoken)
-    - [getTelegramChatIds()](#gettelegramchatids)
-    - [getTelegramParseMode()](#gettelegramparsemode)
-    - [setDeliveryType(delivery\_type)](#setdeliverytypedelivery_type)
-    - [getDeliveryType()](#getdeliverytype)
-    - [isSmsListenerEnabled()](#issmslistenerenabled)
-    - [getUserPhoneNumber()](#getuserphonenumber)
-    - [setUserPhoneNumber(phoneNumber)](#setuserphonenumberphonenumber)
-    - [getAllSettings()](#getallsettings)
-    - [setSendersFilterList(list)](#setsendersfilterlistlist)
-    - [getSendersFilterList()](#getsendersfilterlist)
-    - [setMsgKeywordsFilterList(list)](#setmsgkeywordsfilterlistlist)
-    - [getMsgKeywordsFilterList()](#getmsgkeywordsfilterlist)
-    - [addEventListener(eventHandler)](#addeventlistenereventhandler)
-    - [getEventListenersCount()](#geteventlistenerscount)
-    - [removeAllSMSEventListeners()](#removeallsmseventlisteners)
   - [HTTP Forwarding Details](#http-forwarding-details)
     - [Example: Node.js HTTP Receiver](#example-nodejs-http-receiver)
-  - [Telegram Setup](#telegram-setup)
+  - [Telegram Setup (Quick Start)](#telegram-setup-quick-start)
+    - [Telegram Message Template](#telegram-message-template)
   - [Filtering](#filtering)
   - [Tips \& Issues](#tips--issues)
   - [Future Features](#future-features)
   - [Contributing](#contributing)
   - [License](#license)
+  - [API Reference](#api-reference)
+    - [enableSmsListener(enabled)](#enablesmslistenerenabled)
+    - [setHttpConfigs(configs)](#sethttpconfigsconfigs)
+    - [setTelegramConfig(botToken, chatIds)](#settelegramconfigbottoken-chatids)
+    - [setSendersFilterList(list)](#setsendersfilterlistlist)
+    - [setMsgKeywordsFilterList(list)](#setmsgkeywordsfilterlistlist)
+    - [setDeliveryType(type)](#setdeliverytypetype)
+    - [addEventListener(eventHandler)](#addeventlistenereventhandler)
+    - [getAllSettings()](#getallsettings)
+    - [getHttpConfigs()](#gethttpconfigs)
+    - [setTelegramBotToken(bot\_token)](#settelegrambottokenbot_token)
+    - [setTelegramChatIds(chat\_ids)](#settelegramchatidschat_ids)
+    - [getTelegramBotToken()](#gettelegrambottoken)
+    - [getTelegramChatIds()](#gettelegramchatids)
+    - [getTelegramParseMode()](#gettelegramparsemode)
+    - [getDeliveryType()](#getdeliverytype)
+    - [isSmsListenerEnabled()](#issmslistenerenabled)
+    - [getUserPhoneNumber()](#getuserphonenumber)
+    - [setUserPhoneNumber(phoneNumber)](#setuserphonenumberphonenumber)
+    - [getSendersFilterList()](#getsendersfilterlist)
+    - [getMsgKeywordsFilterList()](#getmsgkeywordsfilterlist)
+    - [getEventListenersCount()](#geteventlistenerscount)
+    - [removeAllSMSEventListeners()](#removeallsmseventlisteners)
 
 ---
 
@@ -153,8 +154,6 @@ You must manually add the following permissions and receivers to your app's `And
 
 ---
 
----
-
 ## Usage
 
 ### Basic Setup
@@ -208,148 +207,7 @@ const settings = await SmsGateway.getAllSettings();
 console.log(settings);
 ```
 
-## API Reference
-
-### enableSmsListener(enabled)
-Enable or disable the SMS listener (background service).
-```ts
-SmsGateway.enableSmsListener(true); // Enable
-SmsGateway.enableSmsListener(false); // Disable
-```
-
-### setHttpConfigs(data)
-Set HTTP endpoints and optional headers for forwarding SMS.
-```ts
-SmsGateway.setHttpConfigs([
-  { url: "https://your-server.com/sms", headers: { Authorization: "Bearer TOKEN" } }
-]);
-```
-Each time an SMS is received, a POST request is sent to each configured URL with the SMS data as JSON.
-
-### getHttpConfigs()
-Get the current HTTP configuration.
-```ts
-const configs = await SmsGateway.getHttpConfigs();
-```
-
-### setTelegramConfig(bot_token, chat_ids)
-Set Telegram bot token and chat IDs at once.
-```ts
-SmsGateway.setTelegramConfig("YOUR_BOT_TOKEN", ["YOUR_CHAT_ID"]);
-```
-
-### setTelegramBotToken(bot_token)
-Set only the Telegram bot token.
-```ts
-SmsGateway.setTelegramBotToken("YOUR_BOT_TOKEN");
-```
-
-### setTelegramChatIds(chat_ids)
-Set only the Telegram chat IDs.
-```ts
-SmsGateway.setTelegramChatIds(["123456789", "-100987654321"]);
-```
-
-### getTelegramBotToken()
-Get the current Telegram bot token.
-```ts
-const token = await SmsGateway.getTelegramBotToken();
-```
-
-### getTelegramChatIds()
-Get the current Telegram chat IDs.
-```ts
-const chatIds = await SmsGateway.getTelegramChatIds();
-```
-
-### getTelegramParseMode()
-Get the Telegram parse mode (currently always 'HTML').
-```ts
-const mode = await SmsGateway.getTelegramParseMode();
-```
-
-### setDeliveryType(delivery_type)
-Set delivery type: 'http', 'telegram', or 'all'.
-```ts
-SmsGateway.setDeliveryType("all");
-```
-
-### getDeliveryType()
-Get the current delivery type.
-```ts
-const type = await SmsGateway.getDeliveryType();
-```
-
-### isSmsListenerEnabled()
-Check if the SMS listener is enabled. It's not checking if you are set an SMS listener into you app but it checks if the SMS listen service running in background it helpful to indicate whether you are enabled / disabled the service via [enableSmsListener(enabled)](#enablesmslistenerenabled)
-```ts
-const enabled = await SmsGateway.isSmsListenerEnabled();
-```
-
-### getUserPhoneNumber()
-Get the saved user phone number.
-```ts
-const phone = await SmsGateway.getUserPhoneNumber();
-```
-
-### setUserPhoneNumber(phoneNumber)
-Set the user phone number for forwarding.
-```ts
-SmsGateway.setUserPhoneNumber("+201234567890");
-```
-
-### getAllSettings()
-Get all current settings as an object.
-```ts
-const settings = await SmsGateway.getAllSettings();
-```
-
-### setSendersFilterList(list)
-Set sender filter list (array of strings).
-```ts
-SmsGateway.setSendersFilterList(["Vodafone", "010"]);
-```
-
-### getSendersFilterList()
-Get the current sender filter list.
-```ts
-const senders = await SmsGateway.getSendersFilterList();
-```
-
-### setMsgKeywordsFilterList(list)
-Set message keywords filter list (array of strings).
-```ts
-SmsGateway.setMsgKeywordsFilterList(["OTP", "gift"]);
-```
-
-### getMsgKeywordsFilterList()
-Get the current message keywords filter list.
-```ts
-const keywords = await SmsGateway.getMsgKeywordsFilterList();
-```
-
-### addEventListener(eventHandler)
-Add a JS event listener for incoming SMS (works only when app is running).
-```ts
-const subscription = SmsGateway.addEventListener((data) => {
-  // data: { msg, timestamp, phoneNumber, sender }
-  console.log("Received SMS:", data);
-});
-// Remove listener when done
-subscription.remove();
-```
-
-### getEventListenersCount()
-Get the number of SMS event listeners currently added.
-```ts
-const count = await SmsGateway.getEventListenersCount();
-```
-
-### removeAllSMSEventListeners()
-Remove all SMS event listeners.
-```ts
-SmsGateway.removeAllSMSEventListeners();
-```
+---
 
 ## HTTP Forwarding Details
 
@@ -396,26 +254,23 @@ app.listen(3000, () => console.log('Listening on port 3000'));
 
 ---
 
-## Telegram Setup
+## Telegram Setup (Quick Start)
 
 1. **Create a Telegram Bot:**
-   - Search for [@BotFather](https://t.me/BotFather) in Telegram.
-   - Use `/newbot` to create a bot and get the bot token. 
-   - Enter bot name like `your_bot` then you will get the bot token copy and save it we will use it later.
-   - Next stay at  [@BotFather](https://t.me/BotFather) and use `/setcommands` to set command to help get the chat id after enter `/setcommands` you will get message like `Choose a bot to change the list of commands.` so enter your bot name like in example above `@your_bot`.
-   - Next you will prompted to enter commands enter the following command `get_chat_id - display current chat id` so it will be used later to get chat it now you are ready
+   - Open [@BotFather](https://t.me/BotFather) in Telegram.
+   - Send `/newbot` and follow the instructions to get your bot token.
 
-2. **Handle Send Chat Id Via `get_chat_id` Command**
-  - By default telegram provide 2 ways to but / receive message via `webhook` or `long pooling` if you plan to deploy you bot to free server like vercel you can use `webhook` check the docs to understand how to use it it's easy to do it then you can use the next examples to get started [check telegram docs for get updates](https://core.telegram.org/bots/api#getting-updates)
+2. **Get Your Chat ID:**
+   - Start a chat with your bot (search for your bot username in Telegram and press "Start").
+   - Send the command `/get_chat_id` to your bot.
+   - If you use a simple bot script (see below), it will reply with your chat ID.
 
-  - Long pooling _(recommended for test)_
-    - the easiest way to get chat id specially when you are testing the pkg is using long pooling the next example install `yarn add node-telegram-bot-api` then try next 
-
-    - `index.js`
-    ```js
-    const TelegramBot = require('node-telegram-bot-api');
-    const TOKEN = 'YOUR_BOT_TOKEN_HERE';
-    const bot = new TelegramBot(TOKEN, { polling: true });  
+   **Sample Node.js Bot for Testing:**
+   ```js
+   // Save as get_chat_id_bot.js and run: node get_chat_id_bot.js
+   const TelegramBot = require('node-telegram-bot-api');
+   const TOKEN = 'YOUR_BOT_TOKEN_HERE';
+   const bot = new TelegramBot(TOKEN, { polling: true });
 
     bot.onText(/\/get_chat_id/, (msg) => {
       const user_id = msg.from.id;
@@ -504,19 +359,21 @@ app.listen(3000, () => console.log('Listening on port 3000'));
    SmsGateway.setTelegramConfig("YOUR_BOT_TOKEN", ["YOUR_CHAT_ID"]);
    ```
 
-5. **Parse Mode:**
-   - The package uses HTML parse mode for formatting. You cannot change this currently.
+**Note:**
+- For groups/channels, add your bot as an admin and use the group/channel ID.
+- The package uses HTML parse mode for Telegram messages.
 
-6. **Telegram Template**
+### Telegram Message Template
   - Currently the telegram HTML template is const and couldn't be modified at the current time in future update may i provide a way to customize it but for now it looks like next
 
-  ```html
-  <b>Date</b>: <code>{{date}}</code>
-  <b>From:</b> <u><code>{{sender}}</code></u>
-  <b>TO:</b> <u><code>{{phoneNumber}}</code></u>
-  <b>Message:</b> 
-  <pre>{{msg}}</pre>
-  ```
+```html
+<b>Date</b>: <code>{{date}}</code>
+<b>From:</b> <u><code>{{sender}}</code></u>
+<b>TO:</b> <u><code>{{phoneNumber}}</code></u>
+<b>Message:</b> 
+<pre>{{msg}}</pre>
+```
+
 ---
 
 ## Filtering
@@ -530,7 +387,6 @@ app.listen(3000, () => console.log('Listening on port 3000'));
 ## Tips & Issues
 
 - **Permissions:** You must request SMS permissions at runtime on Android 6.0+.
-- **Dual SIM:** SIM slot detection is best-effort and may not work on all devices.
 - **Background/Boot:** The module works in the background and after reboot, but some OEMs may restrict background receivers.
 - **Telegram:** Your bot must be an admin in groups/channels to send messages.
 - **HTTP:** You can set multiple endpoints and custom headers for each.
@@ -565,4 +421,216 @@ Contributions are welcome! Please open issues or pull requests for bugs, feature
 ## License
 
 MIT
+
+---
+
+## API Reference
+
+Below are all available methods, their parameters, and usage examples.
+
+### enableSmsListener(enabled)
+Enable or disable the SMS listener (background service).
+
+| Parameter | Type    | Required | Description                |
+|-----------|---------|----------|----------------------------|
+| enabled   | boolean | Yes      | Enable (true) or disable (false) the SMS listener |
+
+**Example:**
+```ts
+SmsGateway.enableSmsListener(true); // Enable
+SmsGateway.enableSmsListener(false); // Disable
+```
+
+---
+
+### setHttpConfigs(configs)
+Set HTTP endpoints and optional headers for forwarding SMS.
+
+| Parameter | Type     | Required | Description |
+|-----------|----------|----------|-------------|
+| configs   | Array<{ url: string, headers?: object }> | Yes | List of HTTP endpoints and optional headers |
+
+**Example:**
+```ts
+SmsGateway.setHttpConfigs([
+  { url: "https://your-server.com/sms", headers: { Authorization: "Bearer TOKEN" } }
+]);
+```
+
+---
+
+### setTelegramConfig(botToken, chatIds)
+Set Telegram bot token and chat IDs at once.
+
+| Parameter | Type     | Required | Description |
+|-----------|----------|----------|-------------|
+| botToken  | string   | Yes      | Telegram bot token |
+| chatIds   | string[] | Yes      | Array of chat IDs (user, group, or channel) |
+
+**Example:**
+```ts
+SmsGateway.setTelegramConfig("YOUR_BOT_TOKEN", ["YOUR_CHAT_ID"]);
+```
+
+---
+
+### setSendersFilterList(list)
+Set sender filter list (array of strings).
+
+| Parameter | Type     | Required | Description |
+|-----------|----------|----------|-------------|
+| list      | string[] | Yes      | List of sender names/numbers to filter |
+
+**Example:**
+```ts
+SmsGateway.setSendersFilterList(["Vodafone", "010"]);
+```
+
+---
+
+### setMsgKeywordsFilterList(list)
+Set message keywords filter list (array of strings).
+
+| Parameter | Type     | Required | Description |
+|-----------|----------|----------|-------------|
+| list      | string[] | Yes      | List of keywords to filter messages |
+
+**Example:**
+```ts
+SmsGateway.setMsgKeywordsFilterList(["OTP", "gift"]);
+```
+
+---
+
+### setDeliveryType(type)
+Set delivery type: 'http', 'telegram', or 'all'.
+
+| Parameter | Type   | Required | Description |
+|-----------|--------|----------|-------------|
+| type      | string | Yes      | 'http', 'telegram', or 'all' |
+
+**Example:**
+```ts
+SmsGateway.setDeliveryType("all");
+```
+
+---
+
+### addEventListener(eventHandler)
+Add a JS event listener for incoming SMS (works only when app is running).
+
+| Parameter    | Type       | Required | Description |
+|--------------|------------|----------|-------------|
+| eventHandler | function   | Yes      | Callback function to handle SMS events |
+
+**Example:**
+```ts
+const subscription = SmsGateway.addEventListener((data) => {
+  // data: { msg, timestamp, phoneNumber, sender }
+  console.log("Received SMS:", data);
+});
+// Remove listener when done
+subscription.remove();
+```
+
+---
+
+### getAllSettings()
+Get all current settings as an object.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| (none)    |      |          |             |
+
+**Example:**
+```ts
+const settings = await SmsGateway.getAllSettings();
+console.log(settings);
+```
+
+---
+
+### getHttpConfigs()
+Get the current HTTP configuration.
+```ts
+const configs = await SmsGateway.getHttpConfigs();
+```
+
+### setTelegramBotToken(bot_token)
+Set only the Telegram bot token.
+```ts
+SmsGateway.setTelegramBotToken("YOUR_BOT_TOKEN");
+```
+
+### setTelegramChatIds(chat_ids)
+Set only the Telegram chat IDs.
+```ts
+SmsGateway.setTelegramChatIds(["123456789", "-100987654321"]);
+```
+
+### getTelegramBotToken()
+Get the current Telegram bot token.
+```ts
+const token = await SmsGateway.getTelegramBotToken();
+```
+
+### getTelegramChatIds()
+Get the current Telegram chat IDs.
+```ts
+const chatIds = await SmsGateway.getTelegramChatIds();
+```
+
+### getTelegramParseMode()
+Get the Telegram parse mode (currently always 'HTML').
+```ts
+const mode = await SmsGateway.getTelegramParseMode();
+```
+
+### getDeliveryType()
+Get the current delivery type.
+```ts
+const type = await SmsGateway.getDeliveryType();
+```
+
+### isSmsListenerEnabled()
+Check if the SMS listener is enabled. It's not checking if you are set an SMS listener into you app but it checks if the SMS listen service running in background it helpful to indicate whether you are enabled / disabled the service via [enableSmsListener(enabled)](#enablesmslistenerenabled)
+```ts
+const enabled = await SmsGateway.isSmsListenerEnabled();
+```
+
+### getUserPhoneNumber()
+Get the saved user phone number.
+```ts
+const phone = await SmsGateway.getUserPhoneNumber();
+```
+
+### setUserPhoneNumber(phoneNumber)
+Set the user phone number for forwarding.
+```ts
+SmsGateway.setUserPhoneNumber("+201234567890");
+```
+
+### getSendersFilterList()
+Get the current sender filter list.
+```ts
+const senders = await SmsGateway.getSendersFilterList();
+```
+
+### getMsgKeywordsFilterList()
+Get the current message keywords filter list.
+```ts
+const keywords = await SmsGateway.getMsgKeywordsFilterList();
+```
+
+### getEventListenersCount()
+Get the number of SMS event listeners currently added.
+```ts
+const count = await SmsGateway.getEventListenersCount();
+```
+
+### removeAllSMSEventListeners()
+Remove all SMS event listeners.
+```ts
+SmsGateway.removeAllSMSEventListeners();
+```
 
