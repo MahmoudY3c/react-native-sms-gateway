@@ -58,10 +58,6 @@ Need to listen/forward incoming SMS to your server or even a Telegram chat, even
     - [addEventListener(eventHandler)](#addeventlistenereventhandler)
     - [getEventListenersCount()](#geteventlistenerscount)
     - [removeAllSMSEventListeners()](#removeallsmseventlisteners)
-  - [Usage](#usage-1)
-    - [Basic Setup](#basic-setup-1)
-    - [Listen for SMS in JS](#listen-for-sms-in-js-1)
-    - [Get All Settings](#get-all-settings-1)
   - [Telegram Setup](#telegram-setup)
   - [Filtering](#filtering)
   - [Tips \& Issues](#tips--issues)
@@ -283,7 +279,7 @@ const type = await SmsGateway.getDeliveryType();
 ```
 
 ### isSmsListenerEnabled()
-Check if the SMS listener is enabled.
+Check if the SMS listener is enabled. It's not checking if you are set an SMS listener into you app but it checks if the SMS listen service running in background it helpful to indicate whether you are enabled / disabled the service via [enableSmsListener(enabled)](#enablesmslistenerenabled)
 ```ts
 const enabled = await SmsGateway.isSmsListenerEnabled();
 ```
@@ -352,63 +348,6 @@ Remove all SMS event listeners.
 ```ts
 SmsGateway.removeAllSMSEventListeners();
 ```
-
----
-
-## Usage
-
-### Basic Setup
-
-```ts
-import { SmsGateway } from "react-native-sms-gateway";
-
-// Enable SMS listener (required)
-SmsGateway.enableSmsListener(true);
-
-// Set HTTP endpoints (optional)
-SmsGateway.setHttpConfigs([
-  { url: "https://your-server.com/sms", headers: { Authorization: "Bearer TOKEN" } }
-]);
-
-// Set Telegram config (optional)
-SmsGateway.setTelegramConfig(
-  "YOUR_TELEGRAM_BOT_TOKEN",
-  ["123456789", "-100987654321"] // chat IDs (user, group, or channel)
-);
-
-// Set delivery type: "http", "telegram", or "all"
-SmsGateway.setDeliveryType("all");
-
-// Set sender filter (optional)
-SmsGateway.setSendersFilterList(["Vodafone", "010"]);
-
-// Set message keyword filter (optional)
-SmsGateway.setMsgKeywordsFilterList(["OTP", "gift"]);
-
-// Set user phone number (optional, for forwarding)
-SmsGateway.setUserPhoneNumber("+201234567890");
-```
-
-### Listen for SMS in JS
-
-```ts
-const subscription = SmsGateway.addEventListener((data) => {
-  // data: { msg, timestamp, phoneNumber, sender }
-  console.log("Received SMS:", data);
-});
-
-// Remove listener when done
-subscription.remove();
-```
-
-### Get All Settings
-
-```ts
-const settings = await SmsGateway.getAllSettings();
-console.log(settings);
-```
-
----
 
 ## Telegram Setup
 
