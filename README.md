@@ -264,10 +264,10 @@ app.listen(3000, () => console.log('Listening on port 3000'));
    - Next you will prompted to enter commands enter the following command `get_chat_id - display current chat id` so it will be used later to get chat it now you are ready
 
 2. **Handle Send Chat Id Via `get_chat_id` Command**
-  - By default telegram provide 2 ways to receive message via `webhook` and `long pooling` if you plan to deploy you bot to free server like vercel you can use `webhook` check the docs to understand how to use it. It's easy to do it then you can use the next examples to get started [check telegram docs for get updates](https://core.telegram.org/bots/api#getting-updates)
+  - By default telegram provide 2 ways to receive message via `webhook` and `long polling` if you plan to deploy you bot to free server like vercel you can use `webhook` check the docs to understand how to use it. It's easy to do it then you can use the next examples to get started [check telegram docs for get updates](https://core.telegram.org/bots/api#getting-updates)
 
-  - Long pooling _(recommended for test)_
-    - the easiest way to get chat id specially when you are testing the pkg is long pooling 
+  - Long polling _(recommended for test)_
+    - the easiest way to get chat id specially when you are testing the pkg is long polling 
    - Start a chat with your bot (search for your bot username in Telegram and press "Start").
    - Send the command `/get_chat_id` to your bot.
    - If you use a simple bot script (see below), it will reply with your chat ID. install `node-telegram-bot-api` then try next 
